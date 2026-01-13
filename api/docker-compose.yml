@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: betterbmr-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${PG_USER:-postgres}
+      POSTGRES_PASSWORD: ${PG_PASS:-password}
+      POSTGRES_DB: ${PG_DB:-betterbmr_local}
+    ports:
+      - "${PG_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

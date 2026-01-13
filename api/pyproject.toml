@@ -1,0 +1,15 @@
+[project]
+name = "betterbmrcalculator-api"
+version = "0.1.0"
+description = "FastAPI service base"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.23.0",
+    "google-auth>=2.23.0",
+    "python-dotenv>=1.2.1",
+    "tortoise-orm>=0.18.1",
+    "aerich>=0.8.0",
+    "asyncpg>=0.31.0",
+]

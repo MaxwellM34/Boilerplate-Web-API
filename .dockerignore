@@ -1,0 +1,10 @@
+# Ignore local config
+.env
+
+# Node
+webapp/node_modules
+webapp/.next
+
+# Python
+api/__pycache__
+api/.venv

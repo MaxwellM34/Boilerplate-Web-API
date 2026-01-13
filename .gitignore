@@ -1,0 +1,17 @@
+# Node
+node_modules/
+webapp/.next/
+webapp/node_modules/
+
+# Python
+__pycache__/
+*.py[cod]
+api/.venv/
+
+# General
+.env
+.DS_Store
+api/.env.cloud
+
+# Client Secret
+cleantsecret.json
