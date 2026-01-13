@@ -14,4 +14,4 @@ api/.venv/
 api/.env.cloud
 
 # Client Secret
-cleantsecret.json
+cleintsecret.json
