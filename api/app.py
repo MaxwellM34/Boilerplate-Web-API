@@ -6,7 +6,7 @@ from tortoise.contrib.fastapi import register_tortoise
 
 from auth import authenticate
 from config import Config
-from routers import users_router
+from routers import auth_router, users_router
 
 
 def init_db(app: FastAPI) -> None:
@@ -40,6 +40,7 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
+    app.include_router(auth_router, prefix=Config.API_PREFIX)
     app.include_router(users_router, prefix=Config.API_PREFIX)
 
     init_db(app)

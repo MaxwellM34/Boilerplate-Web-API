@@ -10,6 +10,7 @@ api/.venv/
 
 # General
 .env
+webapp/.env.local
 .DS_Store
 api/.env.cloud
 .git

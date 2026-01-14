@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Optional
+from typing import Any, Optional
 
 from fastapi.security import HTTPBearer
 
@@ -26,28 +26,42 @@ def normalize_token(raw_token: Optional[str]) -> Optional[str]:
     return token
 
 
-def verify_google_token(token: str) -> Optional[str]:
+def verify_google_token_payload(token: str) -> Optional[dict[str, Any]]:
     """Decode a Google token (if the package is installed) or fallback to debug mode."""
     if not token:
         return None
 
     if Config.DEBUG_AUTH and token == Config.SECRET_KEY:
-        return Config.OFFLINE_ADMIN_EMAIL
+        return {
+            "email": Config.OFFLINE_ADMIN_EMAIL,
+            "given_name": "Dev",
+            "family_name": "Admin",
+        }
 
     if id_token is None or GoogleAuthRequest is None:
+        return None
+    if not Config.GOOGLE_AUDIENCE:
         return None
 
     try:
         request = GoogleAuthRequest()
         decoded = id_token.verify_oauth2_token(token, request, Config.GOOGLE_AUDIENCE)
-        email = decoded.get("email")
         if Config.DEBUG_AUTH:
-            print(f"[auth] decoded token email={email!r}")
-        return email if email else None
+            print(f"[auth] decoded token email={decoded.get('email')!r}")
+        return decoded
     except Exception as exc:  # pragma: no cover
         if Config.DEBUG_AUTH:
             print(f"[auth] google verification failed: {type(exc).__name__}: {exc}")
         return None
+
+
+def verify_google_token(token: str) -> Optional[str]:
+    """Return an email address for a verified Google token."""
+    decoded = verify_google_token_payload(token)
+    if not decoded:
+        return None
+    email = decoded.get("email")
+    return email if email else None
 
 
 async def verify_google_token_db(token: str) -> Optional[User]:
@@ -63,4 +77,10 @@ async def verify_google_token_db(token: str) -> Optional[User]:
     return user
 
 
-__all__ = ["bearer", "normalize_token", "verify_google_token", "verify_google_token_db"]
+__all__ = [
+    "bearer",
+    "normalize_token",
+    "verify_google_token",
+    "verify_google_token_payload",
+    "verify_google_token_db",
+]
