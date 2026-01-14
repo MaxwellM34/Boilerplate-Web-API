@@ -12,6 +12,8 @@ api/.venv/
 .env
 .DS_Store
 api/.env.cloud
+.git
 
 # Client Secret
 clientsecret.json
+client_secret_*.json
