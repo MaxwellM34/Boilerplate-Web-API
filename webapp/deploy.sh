@@ -13,12 +13,18 @@ require_env() {
 }
 
 require_env PROJECT_ID
-require_env REGION
-require_env WEB_SERVICE_NAME
+WEB_BUCKET_NAME="${WEB_BUCKET_NAME:-${WEB_SERVICE_NAME:-}}"
+if [[ -z "$WEB_BUCKET_NAME" ]]; then
+  echo "Missing required env var: WEB_BUCKET_NAME (or WEB_SERVICE_NAME)" >&2
+  exit 1
+fi
+WEB_BUCKET_NAME="${WEB_BUCKET_NAME#gs://}"
 
 gcloud config set project "$PROJECT_ID"
 
-gcloud run deploy "$WEB_SERVICE_NAME" \
-  --allow-unauthenticated \
-  --source . \
-  --region "$REGION"
+if [[ ! -d out ]]; then
+  echo "Missing build output: out/. Run 'npm run build' first." >&2
+  exit 1
+fi
+
+gsutil -m rsync -r -c out/ "gs://$WEB_BUCKET_NAME"

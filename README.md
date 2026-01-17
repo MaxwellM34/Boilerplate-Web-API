@@ -44,10 +44,25 @@ Set `ENV=local` or `ENV=cloud` in your environment or in the `.env` files.
 - Local: uses `api/.env` and `config.LocalConfig` (PG_* values)
 - Cloud: uses `api/.env.cloud` and `config.CloudConfig` (DATABASE_URL or Cloud SQL vars)
 
+## Cloud deploy
+
+Only the API runs as a Cloud Run service. The webapp is exported as a static site and synced to a GCS bucket.
+
+API (Cloud Run):
+- Set `PROJECT_ID`, `REGION`, `API_SERVICE_NAME`, `API_ENV` in `.env`.
+- `cd api`
+- `./deploy.sh`
+
+Webapp (GCS static):
+- Set `PROJECT_ID` and `WEB_BUCKET_NAME` in `.env`.
+- `cd webapp`
+- `npm install`
+- `npm run build`
+- `./deploy.sh`
+
 ## Building your app on top
 
 - Add API routes in `api/routers/` and register them in `api/main.py`.
 - Add database models in `api/models/`. Update auth logic in `api/auth/` as needed.
 - Add frontend pages in `webapp/src/app/` and shared styles in `webapp/src/app/globals.css`.
 - Set any required secrets in `api/.env` (local) or `api/.env.cloud` (cloud).
-

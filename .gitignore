@@ -2,6 +2,7 @@
 node_modules/
 webapp/.next/
 webapp/node_modules/
+webapp/out/
 
 # Python
 __pycache__/
